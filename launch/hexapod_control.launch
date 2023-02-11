@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+
+  <rosparam file="$(find hex)/config/hexapod.yaml"
+            command="load"/>
+
+  <node name="robot_state_publisher_hexapod" pkg="robot_state_publisher" type="robot_state_publisher"
+        respawn="false" output="screen">
+            <param name="publish_frequency" type="double" value="30.0" />
+            <param name="ignore_timestamp" type="bool" value="true" />
+            <param name="tf_prefix" type="string" value="hexapod" />
+            <remap from="/joint_states" to="/hexapod/joint_states" />
+        </node>
+
+
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+        output="screen" args="--namespace=/hexapod
+                              joint_state_controller
+                              haa_joint_1_position_controller
+                              hfe_joint_1_position_controller
+                              kfe_joint_1_position_controller
+                              haa_joint_2_position_controller
+                              hfe_joint_2_position_controller
+                              kfe_joint_2_position_controller
+                              haa_joint_3_position_controller
+                              hfe_joint_3_position_controller
+                              kfe_joint_3_position_controller
+                              haa_joint_4_position_controller
+                              hfe_joint_4_position_controller
+                              kfe_joint_4_position_controller
+                              haa_joint_5_position_controller
+                              hfe_joint_5_position_controller
+                              kfe_joint_5_position_controller
+                              haa_joint_6_position_controller
+                              hfe_joint_6_position_controller
+                              kfe_joint_6_position_controller
+                              --shutdown-timeout 3">
+  </node>
+
+</launch>
