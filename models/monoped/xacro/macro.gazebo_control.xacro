@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <xacro:macro name="gazebo_control">
+
+        <transmission name="haa_joint_6_trans">
+            <type>transmission_interface/SimpleTransmission</type>
+            <joint name="haa_joint_6">
+                <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            </joint>
+            <actuator name="haa_joint_6_Motor">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+            </actuator>
+        </transmission>
+
+        <transmission name="hfe_joint_6_trans">
+            <type>transmission_interface/SimpleTransmission</type>
+            <joint name="hfe_joint_6">
+                <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            </joint>
+            <actuator name="hfe_joint_6_Motor">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+            </actuator>
+        </transmission>
+
+        <transmission name="kfe_joint_6_trans">
+            <type>transmission_interface/SimpleTransmission</type>
+            <joint name="kfe_joint_6">
+                <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            </joint>
+            <actuator name="kfe_joint_6_Motor">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+            </actuator>
+        </transmission>
+
+        <gazebo>
+            <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+                <robotNamespace>/hexapod</robotNamespace>
+                <parameters>$(find hex)/config/monoped.yaml</parameters>
+            </plugin>
+        </gazebo>
+
+    </xacro:macro>
+</robot>

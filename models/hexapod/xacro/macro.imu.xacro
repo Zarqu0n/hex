@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="hexapod">
+
+<xacro:macro name="imu" params="legnumber">
+    <link name="imu_${legnumber}">
+        <inertial>
+            <mass value="0.000001"/>
+            <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+        </inertial>
+        <visual>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <geometry>
+                <box size="0.02 0.001 0.05"/>
+            </geometry>
+            <material name="yellow">
+                <color rgba="1.0 1.0 0.0 1.0"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <geometry>
+                <box size="0.02 0.001 0.05"/>
+            </geometry>
+        </collision>
+    </link>
+    <gazebo reference="imu_${legnumber}">
+      <material>Gazebo/Yellow</material>
+        <sensor name="imu_sensor" type="imu">
+          <always_on>true</always_on>
+          <update_rate>100</update_rate>
+          <visualize>true</visualize>
+          <topic>__default_topic__</topic>
+          <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
+              <topicName>hexapod/sensor/imu_leg_${legnumber}</topicName>
+              <bodyName>imu_link</bodyName>
+              <updateRateHZ>10.0</updateRateHZ>
+              <gaussianNoise>0.0</gaussianNoise>
+              <xyzOffset>0 0 0</xyzOffset>
+              <rpyOffset>0 0 0</rpyOffset>
+              <frameName>imu_link</frameName>
+              <initialOrientationAsReference>false</initialOrientationAsReference>
+          </plugin>
+          <pose>0 0 0 0 0 0</pose>
+        </sensor>
+    </gazebo>
+
+    <joint name="tibia_imu_${legnumber}" type="fixed">
+        <parent link="tibia_${legnumber}"/>
+        <child link="imu_${legnumber}"/>
+        <origin xyz="0.4 0.0 0.015" rpy="1.57 0.0 1.57"/>
+    </joint>
+</xacro:macro>
+</robot>

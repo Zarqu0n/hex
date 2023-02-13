@@ -7,16 +7,15 @@ class JointPub():
     def __init__(self,leg):
 
         self.publishers_array = []
-        self._haa_joint_pub = rospy.Publisher('/hexapod/haa_joint_{}_position_controller/command'.format(leg), Float64, queue_size=1)
-        self._hfe_joint_pub = rospy.Publisher('/hexapod/hfe_joint_{}_position_controller/command'.format(leg), Float64, queue_size=1)
-        self._kfe_joint_pub = rospy.Publisher('/hexapod/kfe_joint_{}_position_controller/command'.format(leg), Float64, queue_size=1)
+        self.base_coxa_joint_pub = rospy.Publisher('/hexapod/base_coxa_joint_{}_position_controller/command'.format(leg), Float64, queue_size=1)
+        self.coxa_femur_joint_pub = rospy.Publisher('/hexapod/coxa_femur_joint_{}_position_controller/command'.format(leg), Float64, queue_size=1)
+        self.femur_tibia_joint_pub = rospy.Publisher('/hexapod/femur_tibia_joint_{}_position_controller/command'.format(leg), Float64, queue_size=1)
         
-        self.publishers_array.append(self._haa_joint_pub)
-        self.publishers_array.append(self._hfe_joint_pub)
-        self.publishers_array.append(self._kfe_joint_pub)
+        self.publishers_array.append(self.base_coxa_joint_pub)
+        self.publishers_array.append(self.coxa_femur_joint_pub)
+        self.publishers_array.append(self.femur_tibia_joint_pub)
 
-    def move_joints(self, joints_array):
-
+    def __move_joints(self, joints_array):
         i = 0
         for publisher_object in self.publishers_array:
           joint_value = Float64()
@@ -26,16 +25,9 @@ class JointPub():
           i += 1
 
 
-    def start_loop(self, rate_value = 2.0, pos1=[0,0,0] ,pos2=[0,0,0]):
+    def move_angle(self, pos=[0,0,0] , rate_value = 2.0):
         rospy.init_node('joint_publisher_node')
         rospy.loginfo("Start Loop")
-        position = "pos1"
         rate = rospy.Rate(rate_value)
-
-        if position == "pos1":
-          self.move_joints(pos1)
-          position = "pos2"
-        else:
-          self.move_joints(pos2)
-          position = "pos1"
-          rate.sleep()
+        self.move_joints(pos)
+        rate.sleep()

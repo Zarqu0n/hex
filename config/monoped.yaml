@@ -1,0 +1,27 @@
+
+hexapod:
+
+  joint_state_controller:
+    type: joint_state_controller/JointStateController
+    publish_rate: 1000
+
+  haa_joint_6_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: haa_joint_6
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+
+  hfe_joint_6_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: hfe_joint_6
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+
+  kfe_joint_6_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: kfe_joint_6
+    pid_gains: {p: 100.0, i: 0.01, d: 10.0}
+
+  gazebo_ros_control:
+    pid_gains:
+      haa_joint_6: {p: 1000.0, i: 0.01, d: 10.0}
+      hfe_joint_6: {p: 1000.0, i: 0.01, d: 10.0}
+      kfe_joint_6: {p: 1000.0, i: 0.01, d: 10.0}

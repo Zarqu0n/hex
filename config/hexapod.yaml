@@ -5,92 +5,92 @@ hexapod:
     type: joint_state_controller/JointStateController
     publish_rate: 1000
 
-  haa_joint_1_position_controller:
+  base_coxa_joint_1_position_controller:
     type: effort_controllers/JointPositionController
-    joint: haa_joint_1
-    pid: {p: 10.0, i: 0.0, d: 0.5}
+    joint: base_coxa_joint_1
+    pid: {p: 10.0, i: 0.0, d: 10}
 
-  hfe_joint_1_position_controller:
+  coxa_femur_joint_1_position_controller:
     type: effort_controllers/JointPositionController
-    joint: hfe_joint_1
-    pid: {p: 1000.0, i: 0.0, d: 0.5}
+    joint: coxa_femur_joint_1
+    pid: {p: 1000.0, i: 0.0, d: 10}
 
-  kfe_joint_1_position_controller:
+  femur_tibia_joint_1_position_controller:
     type: effort_controllers/JointPositionController
-    joint: kfe_joint_1
-    pid: {p: 1000.0, i: 0.0, d: 0.5}
+    joint: femur_tibia_joint_1
+    pid: {p: 1000.0, i: 0.0, d: 10}
     
-  haa_joint_2_position_controller:
+  base_coxa_joint_2_position_controller:
     type: effort_controllers/JointPositionController
-    joint: haa_joint_2
-    pid: {p: 10.0, i: 0.0, d: 0.5}
+    joint: base_coxa_joint_2
+    pid: {p: 10.0, i: 0.0, d: 10}
 
-  hfe_joint_2_position_controller:
+  coxa_femur_joint_2_position_controller:
     type: effort_controllers/JointPositionController
-    joint: hfe_joint_2
-    pid: {p: 1000.0, i: 0.0, d: 0.5}
+    joint: coxa_femur_joint_2
+    pid: {p: 1000.0, i: 0.0, d: 10}
 
-  kfe_joint_2_position_controller:
+  femur_tibia_joint_2_position_controller:
     type: effort_controllers/JointPositionController
-    joint: kfe_joint_2
-    pid: {p: 1000.0, i: 0.0, d: 0.5}
+    joint: femur_tibia_joint_2
+    pid: {p: 1000.0, i: 0.0, d: 10}
 
-  haa_joint_3_position_controller:
+  base_coxa_joint_3_position_controller:
     type: effort_controllers/JointPositionController
-    joint: haa_joint_3
-    pid: {p: 10.0, i: 0.0, d: 0.5}
+    joint: base_coxa_joint_3
+    pid: {p: 10.0, i: 0.0, d: 10}
 
-  hfe_joint_3_position_controller:
+  coxa_femur_joint_3_position_controller:
     type: effort_controllers/JointPositionController
-    joint: hfe_joint_3
-    pid: {p: 1000.0, i: 0.0, d: 0.5}
+    joint: coxa_femur_joint_3
+    pid: {p: 1000.0, i: 0.0, d: 10}
 
-  kfe_joint_3_position_controller:
+  femur_tibia_joint_3_position_controller:
     type: effort_controllers/JointPositionController
-    joint: kfe_joint_3
-    pid: {p: 1000.0, i: 0.0, d: 0.5}
+    joint: femur_tibia_joint_3
+    pid: {p: 1000.0, i: 0.0, d: 10}
 
-  haa_joint_4_position_controller:
+  base_coxa_joint_4_position_controller:
     type: effort_controllers/JointPositionController
-    joint: haa_joint_4
-    pid: {p: 10.0, i: 0.0, d: 0.5}
+    joint: base_coxa_joint_4
+    pid: {p: 10.0, i: 0.0, d: 10}
 
-  hfe_joint_4_position_controller:
+  coxa_femur_joint_4_position_controller:
     type: effort_controllers/JointPositionController
-    joint: hfe_joint_4
-    pid: {p: 1000.0, i: 0.0, d: 0.5}
+    joint: coxa_femur_joint_4
+    pid: {p: 1000.0, i: 0.0, d: 10}
 
-  kfe_joint_4_position_controller:
+  femur_tibia_joint_4_position_controller:
     type: effort_controllers/JointPositionController
-    joint: kfe_joint_4
-    pid: {p: 1000.0, i: 0.0, d: 0.5}
+    joint: femur_tibia_joint_4
+    pid: {p: 1000.0, i: 0.0, d: 10}
 
-  haa_joint_5_position_controller:
+  base_coxa_joint_5_position_controller:
     type: effort_controllers/JointPositionController
-    joint: haa_joint_5
-    pid: {p: 10.0, i: 0.0, d: 0.5}
+    joint: base_coxa_joint_5
+    pid: {p: 10.0, i: 0.0, d: 10}
 
-  hfe_joint_5_position_controller:
+  coxa_femur_joint_5_position_controller:
     type: effort_controllers/JointPositionController
-    joint: hfe_joint_5
-    pid: {p: 1000.0, i: 0.0, d: 0.5}
+    joint: coxa_femur_joint_5
+    pid: {p: 1000.0, i: 0.0, d: 10}
 
-  kfe_joint_5_position_controller:
+  femur_tibia_joint_5_position_controller:
     type: effort_controllers/JointPositionController
-    joint: kfe_joint_5
-    pid: {p: 1000.0, i: 0.0, d: 0.5}
+    joint: femur_tibia_joint_5
+    pid: {p: 1000.0, i: 0.0, d: 10}
 
-  haa_joint_6_position_controller:
+  base_coxa_joint_6_position_controller:
     type: effort_controllers/JointPositionController
-    joint: haa_joint_6
-    pid: {p: 10.0, i: 0.0, d: 0.5}
+    joint: base_coxa_joint_6
+    pid: {p: 10.0, i: 0.0, d: 10}
 
-  hfe_joint_6_position_controller:
+  coxa_femur_joint_6_position_controller:
     type: effort_controllers/JointPositionController
-    joint: hfe_joint_6
-    pid: {p: 1000.0, i: 0.0, d: 0.5}
+    joint: coxa_femur_joint_6
+    pid: {p: 1000.0, i: 0.0, d: 10}
 
-  kfe_joint_6_position_controller:
+  femur_tibia_joint_6_position_controller:
     type: effort_controllers/JointPositionController
-    joint: kfe_joint_6
-    pid: {p: 1000.0, i: 0.0, d: 0.5}
+    joint: femur_tibia_joint_6
+    pid: {p: 1000.0, i: 0.0, d: 10}
