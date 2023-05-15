@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <material name="coxa">
+        <color rgba="0.5 0 0.5 1"/>
+    </material> 
+
+    <material name="femur">
+        <color rgba="0.5 0 0.5 1"/>
+
+    </material>
+
+    <material name="tibia">
+        <color rgba="0.5 0 0.5 1"/>
+    </material> 
+
+    <material name="body_top">
+        <color rgba="0.5 0 0.2 0.5"/>
+    </material>
+
+    <material name="body_bottom">
+        <color rgba="0.5 0 0.2 0.5"/>
+    </material>
+
+    <material name="cover_top">
+        <color rgba="0 0.2 0 0.5"/>
+    </material>
+
+    <material name="board_bracket">
+        <color rgba="0.5 0 0.2 0.5"/>
+    </material>
+
+</robot>

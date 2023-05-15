@@ -1,0 +1,6 @@
+<launch>
+  <arg name="model" default="monoped"/>
+  <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find hex_description)/models/$(arg model)/xacro/$(arg model).urdf.xacro'" />
+  <node name="spawn_model" pkg="gazebo_ros" type="spawn_model" output="screen"
+        args="-urdf -model $(arg model) -param robot_description -z 1.2"/>
+</launch>
