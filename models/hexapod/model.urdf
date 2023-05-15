@@ -897,7 +897,7 @@
     <joint name="imu_joint" type="fixed">
         <parent link="lowerleg_4"/>
         <child link="imu"/>
-        <origin xyz="0.4 0.0 0.015" rpy="1.57 0.0 1.57"/>
+        <origin xyz="0.4 0.8 0.8" rpy="1.57 1.57 1.57"/>
     </joint>
 
 

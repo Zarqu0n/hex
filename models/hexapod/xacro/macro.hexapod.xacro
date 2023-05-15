@@ -99,6 +99,6 @@
         <xacro:imu legnumber="4"/>
         <xacro:imu legnumber="5"/>
         <xacro:imu legnumber="6"/>
-
+        <xacro:base_imu/>
     </xacro:macro>
 </robot>
