@@ -4,8 +4,7 @@ Panels:
     Name: Displays
     Property Tree Widget:
       Expanded:
-        - /Global Options1
-        - /RobotModel1/Status1
+        - /TF1/Frames1
       Splitter Ratio: 0.5
     Tree Height: 1026
   - Class: rviz/Selection
@@ -85,92 +84,21 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        coxa_1:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
         coxa_2:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        coxa_3:
+        end_point_2:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
-        coxa_4:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        coxa_5:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        coxa_6:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        femur_1:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
         femur_2:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        femur_3:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        femur_4:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        femur_5:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        femur_6:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        tibia_1:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
         tibia_2:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        tibia_3:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        tibia_4:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        tibia_5:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        tibia_6:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -182,58 +110,12 @@ Visualization Manager:
       Value: true
       Visual Enabled: true
     - Class: rviz/TF
-      Enabled: true
+      Enabled: false
       Filter (blacklist): ""
       Filter (whitelist): ""
       Frame Timeout: 15
       Frames:
-        All Enabled: true
-        hexapod/base_footprint:
-          Value: true
-        hexapod/board_bracket:
-          Value: true
-        hexapod/body_bottom:
-          Value: true
-        hexapod/body_top:
-          Value: true
-        hexapod/cover_top:
-          Value: true
-        hexapod/coxa_1:
-          Value: true
-        hexapod/coxa_2:
-          Value: true
-        hexapod/coxa_3:
-          Value: true
-        hexapod/coxa_4:
-          Value: true
-        hexapod/coxa_5:
-          Value: true
-        hexapod/coxa_6:
-          Value: true
-        hexapod/femur_1:
-          Value: true
-        hexapod/femur_2:
-          Value: true
-        hexapod/femur_3:
-          Value: true
-        hexapod/femur_4:
-          Value: true
-        hexapod/femur_5:
-          Value: true
-        hexapod/femur_6:
-          Value: true
-        hexapod/tibia_1:
-          Value: true
-        hexapod/tibia_2:
-          Value: true
-        hexapod/tibia_3:
-          Value: true
-        hexapod/tibia_4:
-          Value: true
-        hexapod/tibia_5:
-          Value: true
-        hexapod/tibia_6:
-          Value: true
+        All Enabled: false
       Marker Alpha: 1
       Marker Scale: 1
       Name: TF
@@ -241,39 +123,9 @@ Visualization Manager:
       Show Axes: true
       Show Names: true
       Tree:
-        hexapod/base_footprint:
-          hexapod/body_bottom:
-            hexapod/board_bracket:
-              {}
-            hexapod/body_top:
-              hexapod/cover_top:
-                {}
-            hexapod/coxa_1:
-              hexapod/femur_1:
-                hexapod/tibia_1:
-                  {}
-            hexapod/coxa_2:
-              hexapod/femur_2:
-                hexapod/tibia_2:
-                  {}
-            hexapod/coxa_3:
-              hexapod/femur_3:
-                hexapod/tibia_3:
-                  {}
-            hexapod/coxa_4:
-              hexapod/femur_4:
-                hexapod/tibia_4:
-                  {}
-            hexapod/coxa_5:
-              hexapod/femur_5:
-                hexapod/tibia_5:
-                  {}
-            hexapod/coxa_6:
-              hexapod/femur_6:
-                hexapod/tibia_6:
-                  {}
+        {}
       Update Interval: 0
-      Value: true
+      Value: false
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -301,8 +153,8 @@ Visualization Manager:
   Value: true
   Views:
     Current:
-      Class: rviz/Orbit
-      Distance: 4.086756229400635
+      Class: rviz/ThirdPersonFollower
+      Distance: 4.070462226867676
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -310,17 +162,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: 0
-        Y: 0
-        Z: 0
+        X: 1.328073263168335
+        Y: -0.6313695907592773
+        Z: -1.1920928955078125e-07
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.7253983616828918
+      Pitch: 0.5147961974143982
       Target Frame: <Fixed Frame>
-      Yaw: 2.821767568588257
+      Yaw: 5.85993766784668
     Saved: ~
 Window Geometry:
   Displays:

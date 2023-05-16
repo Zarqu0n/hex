@@ -10,35 +10,41 @@
     <xacro:include filename="$(find hex_description)/models/hexapod/xacro/gazebo.control.xacro"/>
 
     
-    <!-- <xacro:leg 
+    <xacro:leg 
     legnumber="1" 
     xyz="0.7 0.435 0.05"
-    rpy="0 0 2.44"/> -->
+    rpy="0 0 3.14"
+    y_joint="-1.0472"/>
 
      <xacro:leg 
     legnumber="2" 
     xyz="-0.03 0.59 0.05"
-    rpy="0 0 3.14"/>
+    rpy="0 0 3.14"
+    y_joint="0"/>
 
-    <!-- <xacro:leg 
+    <xacro:leg 
     legnumber="3" 
     xyz="-0.76 0.39 0.05"
-    rpy="0 0 3.84"/>
+    rpy="0 0 3.14"
+    y_joint="1.0472"/>
 
     <xacro:leg 
     legnumber="4" 
     xyz="-0.77 -0.345 0.05"
-    rpy="0 0 -0.7"/>
+    rpy="0 0 3.14"
+    y_joint="2.09"/>
 
     <xacro:leg 
     legnumber="5" 
     xyz="-0.054 -0.565 0.05"
-    rpy="0 0 0"/>
+    rpy="0 0 3.14"
+    y_joint="3.14"/>
 
     <xacro:leg 
     legnumber="6" 
     xyz="0.69 -0.435 0.05"
-    rpy="0 0 0.7"/> -->
+    rpy="0 0 3.14"
+    y_joint="4.18"/>
 
     <xacro:dsr_config_coeff_base/>
 </robot>

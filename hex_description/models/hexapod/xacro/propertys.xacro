@@ -20,10 +20,11 @@
     <xacro:property name="lower_cf" value="-0.707"/>     
     <xacro:property name="upper_cf" value="0.707"/>
     <!-- Femur to tibia joints limits -->    
-    <xacro:property name="lower_ft" value="0.707"/>   
-    <xacro:property name="upper_ft" value="2.3"/>
+    <!-- <xacro:property name="lower_ft" value="0.707"/>   
+    <xacro:property name="upper_ft" value="2.3"/> -->
 
-
+    <xacro:property name="lower_ft" value="0"/>   
+    <xacro:property name="upper_ft" value="6.28"/>
 
     <!-- joints stiffness -->
     <xacro:property name="base_coxa_damping" value="60.0"/>

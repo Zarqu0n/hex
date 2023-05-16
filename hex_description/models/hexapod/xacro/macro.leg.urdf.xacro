@@ -2,7 +2,7 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
 
-    <xacro:macro name="leg" params="legnumber xyz rpy">
+    <xacro:macro name="leg" params="legnumber xyz rpy y_joint">
 
         <link name="coxa_${legnumber}">
             <visual>
@@ -16,10 +16,10 @@
               <xacro:box_inertia m="${coxa_mass}" x="0.15" y="0.5" z="0.5"/>
             </inertial>
             <collision>
-            <geometry>
-                <mesh filename="package://hex_description/models/hexapod/meshes/coxa.stl" scale="0.01 0.01 0.01"/>
+                <geometry>
+                    <mesh filename="package://hex_description/models/hexapod/meshes/coxa.stl" scale="0.01 0.01 0.01"/>
+                </geometry>
                 <origin xyz="0 0 0" rpy="${rpy}"/>
-            </geometry>
             </collision> 
         </link>
 
@@ -35,10 +35,10 @@
                  <xacro:box_inertia m="${femur_mass}" x="0.45" y="0.72" z="0.17"/>
             </inertial>
             <collision>
-            <geometry>
-                <mesh filename="package://hex_description/models/hexapod/meshes/femur.stl" scale="0.01 0.01 0.01"/>
-                <origin xyz="0 0 0" rpy="0 0 3.14"/>
-            </geometry>
+                <geometry>
+                    <mesh filename="package://hex_description/models/hexapod/meshes/femur.stl" scale="0.01 0.01 0.01"/>
+                </geometry>
+                <origin xyz="0 0 0" rpy="1.57 1.57 3.14"/>
             </collision> 
         </link>
 
@@ -47,7 +47,7 @@
             <geometry>
                 <mesh filename="package://hex_description/models/hexapod/meshes/tibia.stl" scale="0.01 0.01 0.01"/>
             </geometry>
-            <origin xyz="0 0 0" rpy="0 1.57 0"/>
+            <origin xyz="0 0 0" rpy="0 1.57 1.57"/>
             <material name="tibia"/>
             </visual>
             <inertial>
@@ -56,8 +56,8 @@
             <collision>
             <geometry>
                 <mesh filename="package://hex_description/models/hexapod/meshes/tibia.stl" scale="0.01 0.01 0.01"/>
-                <origin xyz="0 0 0" rpy="0 1.57 0"/>
             </geometry>
+            <origin xyz="0 0 0" rpy="0 1.57 1.57"/>
             </collision>
         </link>
 
@@ -66,7 +66,7 @@
         <joint name="base_coxa_joint_${legnumber}" type="revolute">
             <parent link="body_bottom"/>
             <child link="coxa_${legnumber}"/>
-            <origin rpy="0 0 0" xyz="${xyz}"/>
+            <origin rpy="0 0 ${y_joint}" xyz="${xyz}"/>
             <limit effort="${base_coxa_effort}" lower="${lower_bc}" upper="${upper_bc}" velocity="${base_coxa_velocity}"/>
             <axis xyz="0 0 1"/>
             <dynamics damping="${base_coxa_damping}" friction="${base_coxa_friction}"/>
@@ -93,7 +93,7 @@
         <joint name="end_point_joint_${legnumber}" type="fixed">
             <parent link="tibia_${legnumber}"/>
             <child link="end_point_${legnumber}"/>
-            <origin rpy="0 0.0 0.0" xyz="0 -0.755 0.0"/>
+            <origin rpy="0 0.0 0.0" xyz="0.755 0 0.0"/>
         </joint>
 
     	<xacro:leg_transmissions legnumber="${legnumber}"/>
