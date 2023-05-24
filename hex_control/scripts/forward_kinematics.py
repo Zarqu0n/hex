@@ -1,17 +1,16 @@
+#! /usr/bin/env python
 import math
 import numpy as np
+import os
 
-class LegKinematics:
+class ForwardKinematics:
     def __init__(self) -> None:
-        self.__declare_parameters()
-
-    def __declare_parameters(self):
         # Declare initial parameters
-        self._coxa_length = 0.6
-        self._femur_length = 0.555
-        self._tibia_length = 0.755
+        self._coxa_length = float(os.getenv("HEX_COXA_LENGTH"))
+        self._femur_length = float(os.getenv("HEX_FEMUR_LENGTH"))
+        self._tibia_length = float(os.getenv("HEX_TIBIA_LENGTH"))
 
-        self.base_coxa_dist = 0.6
+        self.base_coxa_dist = float(os.getenv("HEX_BASE_COXA_LENGTH"))
         self.fi = 0
         self.O_12 = 0
         self.O_23 = 0
@@ -71,8 +70,3 @@ class LegKinematics:
             self.base_coxa_dist*math.sin(self.fi) + math.sin(self.fi + O_12)*(self._coxa_length + self._femur_length*math.cos(O_23) + self._tibia_length*math.cos(O_23 + O_34)),
             self._femur_length*math.sin(O_23) + self._tibia_length*math.sin(O_23 + O_34)
         ])
-
-if __name__ == "__main__":
-    leg = LegKinematics()
-    print(leg.get_T03())
-    print(leg.get_pose())
