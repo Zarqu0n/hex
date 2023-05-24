@@ -1,46 +1,45 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
+    
     <!-- Mass -->
-    <xacro:property name="cover_top_mass" value="0.05"/>
-    <xacro:property name="body_top_mass" value="0.2"/>
-    <xacro:property name="board_bracket_mass" value="0.3"/>
-    <xacro:property name="body_bottom_mass" value="0.2"/>
-    <xacro:property name="coxa_mass" value="0.2"/>
-    <xacro:property name="femur_mass" value="0.2"/>
-    <xacro:property name="tibia_mass" value="0.2"/>
+    <xacro:property name="cover_top_mass"       value="$(env HEX_COVER_TOP_MASS)"/>
+    <xacro:property name="body_top_mass"        value="$(env HEX_BODY_TOP_MASS)"/>
+    <xacro:property name="board_bracket_mass"   value="$(env HEX_BOARD_BRACKET_MASS)"/>
+    <xacro:property name="body_bottom_mass"     value="$(env HEX_BODY_BOTTOM_MASS)"/>
+    <xacro:property name="coxa_mass"            value="$(env HEX_COXA_MASS)"/>
+    <xacro:property name="tibia_mass"           value="$(env HEX_TIBIA_MASS)"/>
+    <xacro:property name="femur_mass"           value="$(env HEX_FEMUR_MASS)"/>
 
 
     <!-- Leg Parameters -->
 
      <!-- Base to coxa joints limits -->
-    <xacro:property name="lower_bc" value="-0.707"/>       
-    <xacro:property name="upper_bc" value="0.707"/>  
+    <xacro:property name="lower_bc"             value="$(env HEX_COXA_JOINT_LIMIT_LOWER)"/>
+    <xacro:property name="upper_bc"             value="$(env HEX_COXA_JOINT_LIMIT_UPPER)"/>
     <!-- Coxa to femur joints limits -->       
-    <xacro:property name="lower_cf" value="-0.707"/>     
-    <xacro:property name="upper_cf" value="0.707"/>
+    <xacro:property name="lower_cf"             value="$(env HEX_FEMUR_JOINT_LIMIT_LOWER)"/>
+    <xacro:property name="upper_cf"             value="$(env HEX_FEMUR_JOINT_LIMIT_UPPER)"/>
     <!-- Femur to tibia joints limits -->    
-    <xacro:property name="lower_ft" value="-2.3"/>   
-    <xacro:property name="upper_ft" value="0"/>
+    <xacro:property name="lower_ft"             value="$(env HEX_TIBIA_JOINT_LIMIT_LOWER)"/>
+    <xacro:property name="upper_ft"             value="$(env HEX_TIBIA_JOINT_LIMIT_UPPER)"/>
 
-    <!-- <xacro:property name="lower_ft" value="0"/>   
-    <xacro:property name="upper_ft" value="6.28"/> -->
 
     <!-- joints stiffness -->
-    <xacro:property name="base_coxa_damping" value="60.0"/>
-    <xacro:property name="coxa_femur_damping" value="60.0"/>
-    <xacro:property name="femur_tibia_damping" value="0.7"/>
-    <xacro:property name="base_coxa_friction" value="4.0"/>
-    <xacro:property name="coxa_femur_friction" value="4.0"/>
-    <xacro:property name="femur_tibia_friction" value="0.1"/>
+    <xacro:property name="base_coxa_damping"    value="$(env HEX_COXA_JOINT_DAMPING)"/>
+    <xacro:property name="coxa_femur_damping"   value="$(env HEX_FEMUR_JOINT_DAMPING)"/>
+    <xacro:property name="femur_tibia_damping"  value="$(env HEX_TIBIA_JOINT_DAMPING)"/>
+    <xacro:property name="base_coxa_friction"   value="$(env HEX_COXA_JOINT_FRICTION)"/>
+    <xacro:property name="coxa_femur_friction"  value="$(env HEX_FEMUR_JOINT_FRICTION)"/>
+    <xacro:property name="femur_tibia_friction" value="$(env HEX_TIBIA_JOINT_FRICTION)"/>
   
     <!-- Joint effor and velocity -->
-    <xacro:property name="base_coxa_effort" value="50.0"/>
-    <xacro:property name="coxa_femur_effort" value="50.0"/>
-    <xacro:property name="femur_tibia_effort" value="50.0"/>
-    <xacro:property name="base_coxa_velocity" value="1"/>
-    <xacro:property name="coxa_femur_velocity" value="1"/>
-    <xacro:property name="femur_tibia_velocity" value="1"/>
+    <xacro:property name="base_coxa_effort"     value="$(env HEX_BASE_COXA_EFFORT)"/>
+    <xacro:property name="coxa_femur_effort"    value="$(env HEX_COXA_FEMUR_EFFORT)"/>
+    <xacro:property name="femur_tibia_effort"   value="$(env HEX_FEMUR_TIBIA_EFFORT)"/>
+    <xacro:property name="base_coxa_velocity"   value="$(env HEX_BASE_COXA_VELOCITY)"/>
+    <xacro:property name="coxa_femur_velocity"  value="$(env HEX_COXA_FEMUR_VELOCITY)"/>
+    <xacro:property name="femur_tibia_velocity" value="$(env HEX_FEMUR_TIBIA_VELOCITY)"/>
 
 
 </robot>
