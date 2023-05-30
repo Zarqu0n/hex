@@ -15,19 +15,19 @@
         export HEX_TIBIA_MASS=0.2
 
     # Joints limits in radians
-        # export HEX_COXA_JOINT_LIMIT_LOWER=-0.707
-        # export HEX_COXA_JOINT_LIMIT_UPPER=0.707
-        # export HEX_FEMUR_JOINT_LIMIT_LOWER=-0.707
-        # export HEX_FEMUR_JOINT_LIMIT_UPPER=0.707
-        # export HEX_TIBIA_JOINT_LIMIT_LOWER=-2.3
-        # export HEX_TIBIA_JOINT_LIMIT_UPPER=0
+        export HEX_COXA_JOINT_LIMIT_LOWER=-0.707
+        export HEX_COXA_JOINT_LIMIT_UPPER=0.707
+        export HEX_FEMUR_JOINT_LIMIT_LOWER=-0.707
+        export HEX_FEMUR_JOINT_LIMIT_UPPER=0.707
+        export HEX_TIBIA_JOINT_LIMIT_LOWER=-2.3
+        export HEX_TIBIA_JOINT_LIMIT_UPPER=0
 
-        export HEX_COXA_JOINT_LIMIT_LOWER=0
-        export HEX_COXA_JOINT_LIMIT_UPPER=6.28
-        export HEX_FEMUR_JOINT_LIMIT_LOWER=0
-        export HEX_FEMUR_JOINT_LIMIT_UPPER=6.28
-        export HEX_TIBIA_JOINT_LIMIT_LOWER=0
-        export HEX_TIBIA_JOINT_LIMIT_UPPER=6.28
+        # export HEX_COXA_JOINT_LIMIT_LOWER=0
+        # export HEX_COXA_JOINT_LIMIT_UPPER=6.28
+        # export HEX_FEMUR_JOINT_LIMIT_LOWER=0
+        # export HEX_FEMUR_JOINT_LIMIT_UPPER=6.28
+        # export HEX_TIBIA_JOINT_LIMIT_LOWER=0
+        # export HEX_TIBIA_JOINT_LIMIT_UPPER=6.28
 
     # Joints stiffness in Nm/rad
 
@@ -45,3 +45,7 @@
         export HEX_BASE_COXA_VELOCITY=1.0
         export HEX_COXA_FEMUR_VELOCITY=1.0
         export HEX_FEMUR_TIBIA_VELOCITY=1.0
+
+# Gazebo Model Path
+export GAZEBO_MODEL_PATH=$GAZEBO_MODEL_PATH:/home/zarquon/Project/Hexapod-ROS1/src/gazebo_models_worlds_collection/models
+export GAZEBO_RESOURCE_PATH=$GAZEBO_RESOURCE_PATH:/home/zarquon/Project/Hexapod-ROS1/src/gazebo_models_worlds_collection/worlds
