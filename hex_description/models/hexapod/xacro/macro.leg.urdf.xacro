@@ -99,6 +99,7 @@
             <origin rpy="0 0.0 0.0" xyz="0.755 0 0.0"/>
         </joint>
 
+
     	<xacro:leg_transmissions legnumber="${legnumber}"/>
         <xacro:dsr_config_coeff legnumber="${legnumber}"/>
     </xacro:macro>

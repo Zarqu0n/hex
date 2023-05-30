@@ -21,4 +21,62 @@
         </plugin>
     </gazebo>
 
+    <!-- IMU -->
+    <gazebo>
+        <plugin name="imu_controller" filename="libgazebo_ros_imu.so">
+            <alwaysOn>true</alwaysOn>
+            <!-- <updateRate>50.0</updateRate> -->
+            <bodyName>cover_top</bodyName>
+            <topicName>imu</topicName>
+            <gaussianNoise>0.0</gaussianNoise>
+            <frameName>world</frameName>
+        </plugin>
+    </gazebo>
+
+  <!-- <gazebo reference="cover_top">
+    <gravity>true</gravity>
+    <sensor name="imu_sensor" type="imu">
+      <always_on>true</always_on>
+      <update_rate>50</update_rate>
+      <visualize>false</visualize>
+      <topic>__default_topic__</topic>
+      <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
+        <topicName>imu</topicName>
+        <bodyName>cover_top</bodyName>
+        <updateRateHZ>10.0</updateRateHZ>
+        <gaussianNoise>0.0</gaussianNoise>
+        <xyzOffset>0 0 0</xyzOffset>
+        <rpyOffset>0 0 0</rpyOffset>
+        <frameName>cover_top</frameName>
+        <initialOrientationAsReference>false</initialOrientationAsReference>
+      </plugin>
+      <pose>0 0 0 0 0 0</pose>
+    </sensor>
+  </gazebo> -->
+
+    <xacro:macro name="contact_sensor" params="legnumber">
+        <gazebo reference="tibia_${legnumber}">
+        <!-- contact sensor -->
+            <sensor type="contact" name="tibia_${legnumber}_contact_sens">
+            <update_rate>50.0</update_rate>
+            <always_on>1</always_on>
+            <contact>
+                <collision>tibia_${legnumber}_collision</collision>
+            </contact>
+            <plugin name="gazebo_ros_bumper_controller" filename="libgazebo_ros_bumper.so">
+                    <alwaysOn>true</alwaysOn>
+                    <updateRate>50.0</updateRate>
+                    <bumperTopicName>/contact_${legnumber}</bumperTopicName>
+                    <frameName>world</frameName>
+            </plugin>
+            </sensor>
+        </gazebo>      
+    </xacro:macro>
+
+    <xacro:contact_sensor legnumber="1"/>
+    <xacro:contact_sensor legnumber="2"/>
+    <xacro:contact_sensor legnumber="3"/>
+    <xacro:contact_sensor legnumber="4"/>
+    <xacro:contact_sensor legnumber="5"/>
+    <xacro:contact_sensor legnumber="6"/>
 </robot>
