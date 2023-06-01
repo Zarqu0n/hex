@@ -28,7 +28,7 @@ def main():
     env = DummyVecEnv([lambda: env])
     rospy.logdebug("Learning...")
     model = PPO('MlpPolicy', env, verbose=1, tensorboard_log=log_path, n_steps=n_steps, n_epochs=n_epochs)
-    model.learn(total_timesteps=1, log_interval=1, callback=checkpoint_callback)
+    model.learn(total_timesteps=n_epochs, log_interval=1, callback=checkpoint_callback)
     model.save(save_path + "/ppo_hexapod")
 
 
