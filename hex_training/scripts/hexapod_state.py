@@ -26,6 +26,18 @@ class HexapodState(object):
         self.imu_topic = "/imu"
         self.joint_state_topic = "/hexapod/joint_states"
 
+
+        rospy.loginfo("Subscribing to odom and imu topics...")
+        rospy.Subscriber(self.odom_topic, Odometry, self.odomCb)
+        # We use the IMU for orientation and linearacceleration detection
+        rospy.Subscriber(self.imu_topic, Imu, self.imuCb)
+        # We use it to get the contact force, to know if its in the air or stumping too hard.
+        
+        rospy.loginfo("Subscribing to joint_states topic...")
+        # We use it to get the joints positions and calculate the reward associated to it
+        rospy.Subscriber(self.joint_state_topic, JointState, self.joints_state_callback)
+        self.joints_state = rospy.wait_for_message(self.joint_state_topic, JointState)
+
         rospy.loginfo("Starting MonopedState Class object...")
         self.desired_world_point = Vector3(0.0, 0.0, 0.0)
 
@@ -90,18 +102,6 @@ class HexapodState(object):
         self.legs = [LegController(i) for i in range(1,7)]
         self.contacts = list()
         rospy.loginfo("MonopedState Class object initialization done.")
-
-        rospy.loginfo("Subscribing to odom and imu topics...")
-        rospy.Subscriber(self.odom_topic, Odometry, self.odomCb)
-        # We use the IMU for orientation and linearacceleration detection
-        rospy.Subscriber(self.imu_topic, Imu, self.imuCb)
-        # We use it to get the contact force, to know if its in the air or stumping too hard.
-        
-        rospy.loginfo("Subscribing to joint_states topic...")
-        #TODO maybe we dont need this, because we can use the contact sensor
-        
-        # We use it to get the joints positions and calculate the reward associated to it
-        rospy.Subscriber(self.joint_state_topic, JointState, self.joints_state_callback)
 
     def check_all_systems_ready(self):
         """

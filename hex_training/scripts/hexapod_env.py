@@ -57,7 +57,7 @@ class HexapodEnv(gym.Env):
         self.tibia_joint_min = rospy.get_param("/tibia_joint_min")
 
         # stablishes connection with simulator
-        self.gazebo = GazeboConnection()
+
 
         self.controllers_object = ControllersConnection(namespace="hexapod")
 
@@ -85,7 +85,7 @@ class HexapodEnv(gym.Env):
                                                           self.desired_pose.position.y,
                                                           self.desired_pose.position.z)
         
-        # self.observation_space = spaces.Box(low=-np.inf, high=np.inf)
+        self.observation_space = spaces.Box(low=-np.inf, high=np.inf, shape=(len(self.hexapod_state_object.getObservations()),))
         self.hex_controller = HexapodController()
         """
         For this version, we consider 6 actions
@@ -95,7 +95,7 @@ class HexapodEnv(gym.Env):
         """
         self.action_space = spaces.Discrete(36)
         self.reward_range = (-np.inf, np.inf)
-
+        self.gazebo = GazeboConnection()
         self._seed()
 
     # A function to initialize the random generator
@@ -140,7 +140,7 @@ class HexapodEnv(gym.Env):
         self.gazebo.change_gravity(0.0, 0.0, -9.81)
         # 7th: pauses simulation
         rospy.loginfo("Pause SIM...")
-        self.gazebo.pauseSim()
+        # self.gazebo.pauseSim()
 
         # Get the State Discrete Stringuified version of the observations
         state = self.get_state(observation)
@@ -185,4 +185,5 @@ class HexapodEnv(gym.Env):
         We retrieve the Stringuified-Discrete version of the given observation
         :return: state
         """
-        return self.hexapod_state_object.getStateAsString(observation)
+        # return self.hexapod_state_object.getStateAsString(observation)
+        return observation
