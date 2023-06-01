@@ -101,6 +101,9 @@ class HexapodState(object):
         self.base_linear_acceleration = Vector3()
         self.legs = [LegController(i) for i in range(1,7)]
         self.contacts = list()
+
+        self.action_positions = [0.0 for i in range(18)]
+
         rospy.loginfo("MonopedState Class object initialization done.")
 
     def check_all_systems_ready(self):
@@ -690,13 +693,10 @@ class HexapodState(object):
         joint_states = self.getJointStates()
         joint_states_position = joint_states.position
         
-        #action_position = [0.0,0.0,...,0.0]( has 36 0.0)
-        action_positions = [0.0 for i in range(len(joint_states_position))]
+        action_positions = self.action_positions
 
         rospy.loginfo("get_action_to_position>>>"+str(joint_states_position))
 
-        for i in range(len(joint_states_position)):
-            action_positions[i] = joint_states_position[i]
 
         if action == 0: #Increment base_coxa_joint_1           
             action_positions[0] += self._joint_increment_value
@@ -770,6 +770,8 @@ class HexapodState(object):
             action_positions[17] += self._joint_increment_value
         elif action == 35: #Decrement femur_tibia_joint_6
             action_positions[17] -= self._joint_increment_value
+        
+        self.action_positions = action_positions
         return action_positions
 
     def processData(self):
