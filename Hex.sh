@@ -6,13 +6,13 @@
         export HEX_TIBIA_LENGTH=0.755
 
     # Masses in kg
-        export HEX_COVER_TOP_MASS=0.05
-        export HEX_BODY_TOP_MASS=0.2
-        export HEX_BOARD_BRACKET_MASS=0.3
-        export HEX_BODY_BOTTOM_MASS=0.2
-        export HEX_COXA_MASS=0.2
-        export HEX_FEMUR_MASS=0.2
-        export HEX_TIBIA_MASS=0.2
+        export HEX_COVER_TOP_MASS=0.1
+        export HEX_BODY_TOP_MASS=0.7
+        export HEX_BOARD_BRACKET_MASS=0.7
+        export HEX_BODY_BOTTOM_MASS=0.6
+        export HEX_COXA_MASS=0.6
+        export HEX_FEMUR_MASS=0.6
+        export HEX_TIBIA_MASS=0.6
 
     # Joints limits in radians
         export HEX_COXA_JOINT_LIMIT_LOWER=-0.707
