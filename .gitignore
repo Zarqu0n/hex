@@ -1,4 +1,6 @@
 /.vscode
 __pycache__*
 training_results/*
+hex_training/logs/*
+hex_training/training_results/*
 ```
