@@ -13,7 +13,7 @@
             <material name="coxa"/>
             </visual>
             <inertial>
-              <xacro:box_inertia m="${coxa_mass}" x="0.15" y="0.5" z="0.5"/>
+              <xacro:cylinder_intertia m="${coxa_mass}" r="0.5" h="0.15"/>
               <origin xyz="0 0 0" rpy="${rpy}"/>
             </inertial>
             <collision>
@@ -33,7 +33,7 @@
             <material name="femur"/>
             </visual>
             <inertial>
-                 <xacro:box_inertia m="${femur_mass}" x="0.45" y="0.72" z="0.17"/>
+                 <xacro:cylinder_intertia m="${femur_mass}" r="0.5" h="0.3"/>
                  <origin xyz="0 0 0" rpy="1.57 1.57 1.57"/>
             </inertial>
             <collision>
@@ -54,7 +54,7 @@
             </visual>
             <inertial>
                 <origin xyz="0 0 0" rpy="0 1.57 0"/>
-                <xacro:box_inertia m="${femur_mass}" x="0.3" y="1.15" z="0.22"/>
+                <xacro:cylinder_intertia m="${tibia_mass}" r="0.3" h="1.15"/>
             </inertial>
             <collision>
             <geometry>
