@@ -37,7 +37,6 @@ class HexapodEnv(gym.Env):
         self.desired_pose.position.z = rospy.get_param("/desired_pose/z")
         self.running_step = rospy.get_param("/running_step")
         self.max_incl = rospy.get_param("/max_incl")
-        self.joint_increment_value = rospy.get_param("/joint_increment_value")
         self.done_reward = rospy.get_param("/done_reward")
         self.alive_reward = rospy.get_param("/alive_reward")
         self.desired_yaw = rospy.get_param("/desired_yaw")
@@ -56,6 +55,10 @@ class HexapodEnv(gym.Env):
         self.tibia_joint_max = rospy.get_param("/tibia_joint_max")
         self.tibia_joint_min = rospy.get_param("/tibia_joint_min")
 
+        self.abs_joint_max_action = rospy.get_param("/abs_joint_max_action")
+
+        self.render_mode = None
+        
         # stablishes connection with simulator
 
 
@@ -66,7 +69,6 @@ class HexapodEnv(gym.Env):
                                                     abs_min_pos_dist=self.abs_min_pos_dist,
                                                     abs_max_pos_dist=self.abs_max_pos_dist,
                                                     abs_max_distance=self.abs_max_distance,
-                                                    joint_increment_value=self.joint_increment_value,
                                                     done_reward=self.done_reward,
                                                     alive_reward=self.alive_reward,
                                                     desired_yaw=self.desired_yaw,
@@ -85,16 +87,22 @@ class HexapodEnv(gym.Env):
                                                           self.desired_pose.position.y,
                                                           self.desired_pose.position.z)
         
-        self.observation_space = spaces.Box(low=-np.inf, high=np.inf, shape=(len(self.hexapod_state_object.getObservations()),))
+        observations = self.hexapod_state_object.getObservations()
+        # self.observation_space = spaces.Box(low=-np.inf, high=np.inf, shape=(len(self.hexapod_state_object.getObservations()),))
+
+        self.observation_space = spaces.Dict(
+            {"Distance":spaces.Box(low=-np.inf, high=np.inf, shape=(3,), dtype=np.float32),
+             "BaseOrientation":spaces.Box(low=-2*np.pi, high=2*np.pi, shape=(3,), dtype=np.float32),
+             "Contacts":spaces.Box(low=-0, high=1, shape=(6,), dtype=np.float32),
+             "JointStates":spaces.Box(low=-2*np.pi, high=2*np.pi, shape=(18,), dtype=np.float32)})
+        
         self.hex_controller = HexapodController()
-        """
-        For this version, we consider 6 actions
-        1-2) Increment/Decrement haa_joint
-        3-4) Increment/Decrement hfe_joint
-        5-6) Increment/Decrement kfe_joint
-        """
-        self.action_space = spaces.Discrete(36)
+
+        self.action_space = spaces.Box(low=-self.abs_joint_max_action, high=self.abs_joint_max_action, shape=(18,), dtype=np.float32)
+
+
         self.reward_range = (-np.inf, np.inf)
+
         self.gazebo = GazeboConnection()
         self._seed()
 
@@ -104,8 +112,9 @@ class HexapodEnv(gym.Env):
         return [seed]
         
     # Resets the state of the environment and returns an initial observation.
-    def _reset(self):
-
+    def reset(self):
+        
+        self.hexapod_state_object.step = 0
         # 0st: We pause the Simulator
         rospy.loginfo("Pausing SIM...")
         self.gazebo.pauseSim()
@@ -133,7 +142,7 @@ class HexapodEnv(gym.Env):
         rospy.loginfo("check_all_systems_ready...")
         # self.hexapod_state_object.check_all_systems_ready()
         rospy.loginfo("get_observations...")
-        observation = self.hexapod_state_object.getObservations()
+        state = self.hexapod_state_object.getObservations()
 
         # 6th: We restore the gravity to original
         rospy.loginfo("Restore Gravity...")
@@ -142,29 +151,30 @@ class HexapodEnv(gym.Env):
         rospy.loginfo("Pause SIM...")
         # self.gazebo.pauseSim()
 
-        # Get the State Discrete Stringuified version of the observations
-        state = self.get_state(observation)
+        #Starts random
+        random_action = np.random.uniform(low=-self.abs_joint_max_action, high=self.abs_joint_max_action, size=(18,))
+        pose = self.hexapod_state_object.action2pose(random_action)
+        self.hex_controller.setAllLegsAngle(pose)
 
         return state
 
     def _render(self, mode='human', close=True):
         pass
 
-    def _step(self, action):
+    def step(self, action):
 
         # Given the action selected by the learning algorithm,
         # we perform the corresponding movement of the robot
 
         # 1st, decide which action corresponsd to which joint is incremented
-        next_action_position = self.hexapod_state_object.get_action_to_position(action)
+    
 
         # We move it to that pos
-        self.gazebo.unpauseSim()
-        self.hex_controller.setAllLegsAngle(next_action_position)
+        pose = self.hexapod_state_object.action2pose(action)
+        self.hex_controller.setAllLegsAngle(pose)
         # Then we send the command to the robot and let it go
         # for running_step seconds
         time.sleep(self.running_step)
-        self.gazebo.pauseSim()
 
         # We now process the latest data saved in the class state to calculate
         # the state and the rewards. This way we guarantee that they work
@@ -173,12 +183,12 @@ class HexapodEnv(gym.Env):
         observation = self.hexapod_state_object.getObservations()
 
         # finally we get an evaluation based on what happened in the sim
-        reward,done = self.hexapod_state_object.processData()
+        reward,done,info= self.hexapod_state_object.processData()
 
         # Get the State Discrete Stringuified version of the observations
-        state = self.get_state(observation)
+        # state = self.get_state(observation)
 
-        return state, reward, done, {}
+        return observation, reward, done, info
 
     def get_state(self, observation):
         """
