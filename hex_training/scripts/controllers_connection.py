@@ -60,7 +60,7 @@ class ControllersConnection():
             result_on_ok = self.switch_controllers(controllers_on=controllers_reset,
                                                     controllers_off=[])
             if result_on_ok:
-                rospy.loginfo("Controllers Reseted==>"+str(controllers_reset))
+                rospy.loginfo("Controllers Reseted")
                 reset_result = True
             else:
                 rospy.loginfo("result_on_ok==>" + str(result_on_ok))
