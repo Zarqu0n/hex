@@ -1,13 +1,13 @@
-#! /usr/bin/env python3
-from hex_control.legCtrl import LegController
-import rospy
-import time
-from gazebo_connection import GazeboConnection
-from hexapod_state import HexapodState
-from hexapod_env import HexapodEnv
-from controllers_connection import ControllersConnection
-from hex_control.hegzi import HexapodController
-
+# #! /usr/bin/env python3
+# from hex_control.legCtrl import LegController
+# import rospy
+# import time
+# from gazebo_connection import GazeboConnection
+# from hexapod_state import HexapodState
+# from hexapod_env import HexapodEnv
+# from controllers_connection import ControllersConnection
+# from hex_control.hegzi import HexapodController
+import numpy as np
 class Test:
     def __init__(self) -> None:
         self.gazebo = GazeboConnection()
@@ -56,7 +56,14 @@ class Test:
 
 
 if __name__ == "__main__":
-    rospy.init_node("hexapod_control_node")
-    rospy.loginfo("Starting")
-    test = Test()
-    test._reset()
+    # print(np.array(shape=(6,3),dtype=float))
+    action = np.zeros(18)
+    pose_matris = np.zeros((6, 3))
+    for i in range(6):
+        pose_matris[i] = [action[i], action[i+6], action[i+12]]
+
+    print(pose_matris[1])
+    # rospy.init_node("hexapod_control_node")
+    # rospy.loginfo("Starting")
+    # test = Test()
+    # test._reset()

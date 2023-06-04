@@ -10,5 +10,5 @@
     <!-- Load the parameters for the algorithm -->
     <rosparam command="load" file="$(find hex_training)/config/qlearn_params.yaml" />
     <!-- Launch the training system -->
-    <node pkg="hex_training" name="hexapod_gym" type="model.py" output="screen"/>
+    <node pkg="hex_training" name="hexapod_gym" type="model_idle.py" output="screen"/>
 </launch>
