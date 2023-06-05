@@ -19,12 +19,13 @@ from hex_control.hegzi import HexapodController
 #register the training environment in the gym as an available one
 reg = register(
     id='Hexapod-v0-idle',
-    entry_point='hexapod_env_idle:HexapodEnvIdle'
+    entry_point='hexapod_env_idle:HexapodEnvIdle',
+    max_episode_steps=50
     )
 
 
 class HexapodEnvIdle(gym.Env):
-
+    metadata = {'render_modes': ['human']}
     def __init__(self):
         
         # We assume that a ROS node has already been created
@@ -56,8 +57,6 @@ class HexapodEnvIdle(gym.Env):
         self.tibia_joint_min = rospy.get_param("/tibia_joint_min")
 
         self.abs_joint_max_action = rospy.get_param("/abs_joint_max_action")
-
-        self.render_mode = None
         
         # stablishes connection with simulator
 
@@ -113,8 +112,10 @@ class HexapodEnvIdle(gym.Env):
         return [seed]
         
     # Resets the state of the environment and returns an initial observation.
-    def reset(self):
-        
+    def reset(self,seed=_seed,options=None):
+
+        super().reset(seed=seed)
+
         self.hexapod_state_object.step = 0
         # 0st: We pause the Simulator
         rospy.loginfo("Pausing SIM...")
@@ -156,8 +157,10 @@ class HexapodEnvIdle(gym.Env):
         random_action = np.random.uniform(low=-self.abs_joint_max_action, high=self.abs_joint_max_action, size=(18,))
         pose = self.hexapod_state_object.action2pose(random_action)
         self.hex_controller.setAllLegsAngle(pose)
+        time.sleep(self.running_step)
+        info = self.hexapod_state_object.getInfo()
 
-        return state
+        return state,info
 
     def _render(self, mode='human', close=True):
         pass
@@ -189,12 +192,4 @@ class HexapodEnvIdle(gym.Env):
         # Get the State Discrete Stringuified version of the observations
         # state = self.get_state(observation)
 
-        return observation, reward, done, info
-
-    def get_state(self, observation):
-        """
-        We retrieve the Stringuified-Discrete version of the given observation
-        :return: state
-        """
-        # return self.hexapod_state_object.getStateAsString(observation)
-        return observation
+        return observation, reward, done, False,info

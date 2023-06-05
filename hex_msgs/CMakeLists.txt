@@ -51,6 +51,7 @@ find_package(catkin REQUIRED COMPONENTS
 add_message_files(
   FILES
   HexStates.msg
+  IdleTrainState.msg
 )
 
 ## Generate services in the 'srv' folder

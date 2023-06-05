@@ -11,7 +11,8 @@ import numpy
 import math
 from hex_control.legCtrl import LegController
 from std_msgs.msg import Int32
-    
+from hex_msgs.msg import IdleTrainState
+
 class HexapodStateIdle(object):
 
     def __init__(self,abs_max_roll, abs_max_pitch,abs_min_pos_dist = 0.1, abs_max_pos_dist = 0.5 ,
@@ -25,6 +26,7 @@ class HexapodStateIdle(object):
         self.odom_topic = "/odom"
         self.imu_topic = "/imu"
         self.joint_state_topic = "/hexapod/joint_states"
+        self.train_state_topic = "/train_state"
 
 
         rospy.loginfo("Subscribing to odom and imu topics...")
@@ -40,6 +42,8 @@ class HexapodStateIdle(object):
 
         rospy.loginfo("Starting MonopedState Class object...")
         self.desired_world_point = Vector3(0.0, 0.0, 0.0)
+
+        self.train_state_pub = rospy.Publisher(self.train_state_topic, IdleTrainState, queue_size=1)
 
         self._abs_max_roll = abs_max_roll
         self._abs_max_pitch = abs_max_pitch
@@ -60,6 +64,7 @@ class HexapodStateIdle(object):
         self._weight_r3 = weight_r3
         self._debug = debug
 
+        self.prev_reward = 0.0
         self._list_of_observations = ["desired_height",
                 "curr_height",
                 "base_roll",
@@ -107,6 +112,14 @@ class HexapodStateIdle(object):
 
         self.step = 0
         rospy.loginfo("MonopedState Class object initialization done.")
+
+
+    def getInfo(self):
+        return {"distance":self.desired_world_point.z-self.base_position.z,
+                "oriantation":self.base_orientation,
+                "contact":self.contacts,
+                "reward":self.total_reward}
+    
 
     def check_all_systems_ready(self):
         """
@@ -264,7 +277,6 @@ class HexapodStateIdle(object):
         for leg in self.legs:
             contact = leg.getContact()
             reward += weight * contact
-        rospy.loginfo("Contact reward: " + str(reward))
         return reward
 
     def rewardOriantation(self, weight=1.0):
@@ -277,9 +289,8 @@ class HexapodStateIdle(object):
         """
         curren_orientation = self.getBaseRPY()
         yaw_displacement = curren_orientation.z - self._desired_yaw
-        acumulated_orientation_displacement = abs(curren_orientation.x) + abs(curren_orientation.y) + abs(yaw_displacement)
+        acumulated_orientation_displacement = abs(curren_orientation.x) + abs(curren_orientation.y)
         reward = -weight * acumulated_orientation_displacement
-        rospy.loginfo("Orientation reward: " + str(reward))
         return reward
 
     def rewardDistance(self, weight=1.0):
@@ -291,7 +302,6 @@ class HexapodStateIdle(object):
         """
         distance = self.desired_world_point.z - self.base_position.z
         reward = -weight * distance
-        rospy.loginfo("Distance reward: " + str(reward))
         return reward
 
     def totalReward(self):
@@ -426,12 +436,12 @@ class HexapodStateIdle(object):
 
 
         observation = {"Distance":numpy.array([current_height,
-         desired_height]),
-             "BaseOrientation":numpy.array([base_roll,base_pitch,base_yaw]),
-             "Contacts":numpy.array([contact_bool_1,contact_bool_2,contact_bool_3,contact_bool_4,contact_bool_5,contact_bool_6]),
+         desired_height],dtype=numpy.float32),
+             "BaseOrientation":numpy.array([base_roll,base_pitch,base_yaw],dtype=numpy.float32),
+             "Contacts":numpy.array([contact_bool_1,contact_bool_2,contact_bool_3,contact_bool_4,contact_bool_5,contact_bool_6],dtype=numpy.float32),
              "JointStates":numpy.array([base_coxa_joint_1_state,base_coxa_joint_2_state,base_coxa_joint_3_state,base_coxa_joint_4_state,base_coxa_joint_5_state,base_coxa_joint_6_state,
              coxa_femur_joint_1_state,coxa_femur_joint_2_state,coxa_femur_joint_3_state,coxa_femur_joint_4_state,coxa_femur_joint_5_state,coxa_femur_joint_6_state,
-             femur_tibia_joint_1_state,femur_tibia_joint_2_state,femur_tibia_joint_3_state,femur_tibia_joint_4_state,femur_tibia_joint_5_state,femur_tibia_joint_6_state])}
+             femur_tibia_joint_1_state,femur_tibia_joint_2_state,femur_tibia_joint_3_state,femur_tibia_joint_4_state,femur_tibia_joint_5_state,femur_tibia_joint_6_state],dtype=numpy.float32)}
 
         return observation
 
@@ -445,20 +455,33 @@ class HexapodStateIdle(object):
         orientation_ok = self.isBaseOriantationOk()
         contact_ok = self.isContactOk()
         self.step += 1
-        done = (position_ok and orientation_ok and contact_ok)
-        if done:
-            # rospy.loginfo("It fell, so the reward has to be very low")
-            total_reward = self._done_reward
-        else:
-            # rospy.loginfo("Calculate normal reward because it didn't fall.")
-            total_reward = self.totalReward()
+        done = (position_ok and orientation_ok)
+        # if done:
+        #     # rospy.loginfo("It fell, so the reward has to be very low")
+        #     total_reward = self._done_reward
+        # else:
+        #     # rospy.loginfo("Calculate normal reward because it didn't fall.")
+        #     total_reward = self.totalReward()
 
-        rospy.loginfo(orientation_ok)
-        rospy.loginfo(position_ok)
-        rospy.loginfo(contact_ok)
+        total_reward = self.totalReward()
+        reward = total_reward 
 
         distance = self.getDistanceFromPoints(self.desired_world_point)
-        info = {"Total Reward":total_reward,
-                "Distance":distance}
 
-        return total_reward, done, info
+        info = self.getInfo()
+
+        idle_state = IdleTrainState()
+        idle_state.distance = distance
+        idle_state.distance_ok = position_ok
+        idle_state.distance_reward = self.distance_reward
+        idle_state.oriantation_roll = self.base_orientation.x
+        idle_state.oriantation_pitch = self.base_orientation.y
+        idle_state.oriantation_ok = orientation_ok
+        idle_state.oriantation_reward = self.orientation_reward
+        idle_state.contact_ok = contact_ok
+        idle_state.contact_reward = self.contact_reward
+        idle_state.total_reward = total_reward
+        self.train_state_pub.publish(idle_state)
+        
+
+        return reward, done, info

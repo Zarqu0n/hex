@@ -1,0 +1,11 @@
+std_msgs/Header header
+float32 distance
+float32 distance_ok
+float32 distance_reward
+float32 oriantation_roll
+float32 oriantation_pitch
+float32 oriantation_ok
+float32 oriantation_reward
+float32 contact_ok
+float32 contact_reward
+float32 total_reward
