@@ -37,7 +37,7 @@ class HexapodEnvIdle(gym.Env):
         self.desired_pose.position.y = rospy.get_param("/desired_pose/y")
         self.desired_pose.position.z = rospy.get_param("/desired_pose/z")
         self.running_step = rospy.get_param("/running_step")
-        self.max_incl = rospy.get_param("/max_incl")
+        self.max_oriantation = rospy.get_param("/max_oriantation")
         self.done_reward = rospy.get_param("/done_reward")
         self.alive_reward = rospy.get_param("/alive_reward")
         self.desired_yaw = rospy.get_param("/desired_yaw")
@@ -63,8 +63,8 @@ class HexapodEnvIdle(gym.Env):
 
         self.controllers_object = ControllersConnection(namespace="hexapod")
 
-        self.hexapod_state_object = HexapodStateIdle(   abs_max_roll=self.max_incl,
-                                                    abs_max_pitch=self.max_incl,
+        self.hexapod_state_object = HexapodStateIdle(   abs_max_roll=self.max_oriantation,
+                                                    abs_max_pitch=self.max_oriantation,
                                                     abs_min_pos_dist=self.abs_min_pos_dist,
                                                     abs_max_pos_dist=self.abs_max_pos_dist,
                                                     abs_max_distance=self.abs_max_distance,
@@ -100,7 +100,9 @@ class HexapodEnvIdle(gym.Env):
 
         self.action_space = spaces.Box(low=-self.abs_joint_max_action, high=self.abs_joint_max_action, shape=(18,), dtype=np.float32)
 
-
+        self.reward = 0.0
+        self.cumulated_reward = 0.0
+        self.old_reward = 0.0
         self.reward_range = (-np.inf, np.inf)
 
         self.gazebo = GazeboConnection()
@@ -119,7 +121,7 @@ class HexapodEnvIdle(gym.Env):
         self.hexapod_state_object.step = 0
         # 0st: We pause the Simulator
         rospy.loginfo("Pausing SIM...")
-        self.gazebo.pauseSim()
+        # self.gazebo.pauseSim()
 
         # 1st: resets the simulation to initial values
         rospy.loginfo("Reset SIM...")
@@ -150,11 +152,12 @@ class HexapodEnvIdle(gym.Env):
         rospy.loginfo("Restore Gravity...")
         self.gazebo.change_gravity(0.0, 0.0, -9.81)
         # 7th: pauses simulation
-        rospy.loginfo("Pause SIM...")
+        # rospy.loginfo("Pause SIM...")
         # self.gazebo.pauseSim()
 
         #Starts random
-        random_action = np.random.uniform(low=-self.abs_joint_max_action, high=self.abs_joint_max_action, size=(18,))
+        # random_action = np.random.uniform(low=-self.abs_joint_max_action, high=self.abs_joint_max_action, size=(18,))
+        random_action = self.action_space.sample()
         pose = self.hexapod_state_object.action2pose(random_action)
         self.hex_controller.setAllLegsAngle(pose)
         time.sleep(self.running_step)
@@ -187,9 +190,13 @@ class HexapodEnvIdle(gym.Env):
         observation = self.hexapod_state_object.getObservations()
 
         # finally we get an evaluation based on what happened in the sim
-        reward,done,info= self.hexapod_state_object.processData()
+        _reward,done,info= self.hexapod_state_object.processData()
+        
+        self.reward = _reward - self.old_reward
+        self.old_reward = _reward
+        self.cumulated_reward += self.reward
 
         # Get the State Discrete Stringuified version of the observations
         # state = self.get_state(observation)
 
-        return observation, reward, done, False,info
+        return observation, self.reward, done, False,info

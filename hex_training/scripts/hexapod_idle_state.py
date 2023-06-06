@@ -456,15 +456,8 @@ class HexapodStateIdle(object):
         contact_ok = self.isContactOk()
         self.step += 1
         done = (position_ok and orientation_ok)
-        # if done:
-        #     # rospy.loginfo("It fell, so the reward has to be very low")
-        #     total_reward = self._done_reward
-        # else:
-        #     # rospy.loginfo("Calculate normal reward because it didn't fall.")
-        #     total_reward = self.totalReward()
-
         total_reward = self.totalReward()
-        reward = total_reward 
+        reward = total_reward  + (self._done_reward if done else 0.0)
 
         distance = self.getDistanceFromPoints(self.desired_world_point)
 
