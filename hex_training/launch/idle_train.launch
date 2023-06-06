@@ -8,7 +8,7 @@
 <launch>
     
     <!-- Load the parameters for the algorithm -->
-    <rosparam command="load" file="$(find hex_training)/config/qlearn_params.yaml" />
+    <rosparam command="load" file="$(find hex_training)/config/idle_train_params.yaml" />
     <!-- Launch the training system -->
     <node pkg="hex_training" name="hexapod_gym" type="model_idle.py" output="screen"/>
 </launch>

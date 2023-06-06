@@ -32,7 +32,7 @@ tibia_joint_min: -2.3
 ## Reward 1: Distance from desired point 
 ## Reward 2: A negative reward for penalising the ant if the external contact force is too large. 
 ## Reward 2: A negative reward for penalising orientation 
-done_reward: 300.0 # reward
+done_reward: 100.0 # reward
 alive_reward: 100.0 # reward
 
 weight_r1: 10.0 
