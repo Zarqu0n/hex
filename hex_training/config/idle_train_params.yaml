@@ -1,13 +1,13 @@
 # Model Parameters
-model_name: model_idle3
+model_name: model_idle4
 model: PPO
 total_timesteps: 100000
 
 #### PPO Hyper parameters
 learning_rate: 0.0003
 gamma: 0.99
-nsteps: 20
-n_epochs: 10
+nsteps: 10
+n_epochs: 1
 gae_lambda: 0.95
 clip_range: 0.2
 clip_range_vf: 0.2
@@ -25,14 +25,14 @@ deterministic: True
 desired_pose:
     x: 0
     y: 0
-    z: 0.7
+    z: 0.8
 
 desired_yaw: 0.0 # Desired yaw in radians for the hopper to stay
 max_oriantation: 0.1     # in rads
 running_step: 2.5   # in seconds
 abs_joint_max_action: 2.3
   # in radians
-abs_min_pos_dist: 0.6
+abs_min_pos_dist: 0.1
 abs_max_pos_dist: 0.9
 abs_max_distance: 10
 
@@ -48,8 +48,8 @@ tibia_joint_min: -2.3
 ## Reward 1: Distance from desired point 
 ## Reward 2: A negative reward for penalising the ant if the external contact force is too large. 
 ## Reward 2: A negative reward for penalising orientation 
-done_reward: 10.0 # reward
-alive_reward: 20.0 # reward
+done_reward: 40.0 # reward
+alive_reward: 50.0 # reward
 
 weight_r1: 100.0 
 weight_r2: 8.0 
