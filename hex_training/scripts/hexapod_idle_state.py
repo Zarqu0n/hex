@@ -245,7 +245,8 @@ class HexapodStateIdle(object):
         return position_ok
 
     def isHeightOk(self):
-        height_ok = self._abs_min_pos_dist <= self.base_position.z < self._abs_max_pos_dist
+        # height_ok = self._abs_min_pos_dist <= self.base_position.z < self._abs_max_pos_dist
+        height_ok = self._abs_min_pos_dist >= abs(self.base_position.z - self.desired_world_point.z)
         return height_ok
 
     def isBaseOriantationOk(self):
@@ -301,7 +302,8 @@ class HexapodStateIdle(object):
         :return:reward
         """
         distance = self.desired_world_point.z - self.base_position.z
-        reward = -weight * distance
+        distance_squared = distance ** 2
+        reward = -weight * distance_squared
         return reward
 
     def totalReward(self):
@@ -459,7 +461,7 @@ class HexapodStateIdle(object):
         total_reward = self.totalReward()
         reward = total_reward  + (self._done_reward if done else 0.0)
 
-        distance = self.getDistanceFromPoints(self.desired_world_point)
+        distance = abs(self.base_position.z - self.desired_world_point.z)
 
         info = self.getInfo()
 
