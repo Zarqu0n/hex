@@ -3,21 +3,22 @@
     By Miguel Angel Rodriguez <duckfrost@theconstructsim.com>
     Visit our website at www.theconstructsim.com
 '''
-import gym
+# import gym
+import gymnasium as gym
 import rospy
 import numpy as np
 import time
-from gym import utils, spaces
+from gymnasium import spaces
 from geometry_msgs.msg import Pose
-from gym.utils import seeding
-from gym.envs.registration import register
+from gymnasium.utils import seeding
 from gazebo_connection import GazeboConnection
 from hex_control.legCtrl import LegController
 from hexapod_idle_state import HexapodStateIdle
 from controllers_connection import ControllersConnection
 from hex_control.hegzi import HexapodController
+import random
 #register the training environment in the gym as an available one
-reg = register(
+reg = gym.register(
     id='Hexapod-v0-idle',
     entry_point='hexapod_env_idle:HexapodEnvIdle',
     max_episode_steps=50
@@ -114,13 +115,22 @@ class HexapodEnvIdle(gym.Env):
         return [seed]
         
     # Resets the state of the environment and returns an initial observation.
-    def reset(self,seed=_seed,options=None):
+    def reset(self,seed=None,options=None):
 
         super().reset(seed=seed)
 
+        self.cumulated_reward = 0
         self.hexapod_state_object.step = 0
         # 0st: We pause the Simulator
         rospy.loginfo("Pausing SIM...")
+
+        #create rando positin range low = 0.1 high = 
+        self.desired_pose.position.z = random.uniform(0.45, self.abs_max_pos_dist)
+        self.hexapod_state_object.setDesiredWorldPoints(self.desired_pose.position.x,
+                                                        self.desired_pose.position.y,
+                                                        self.desired_pose.position.z)
+        rospy.loginfo("Desired Pose: " + str(self.desired_pose.position.z))
+
         # self.gazebo.pauseSim()
 
         # 1st: resets the simulation to initial values
@@ -192,7 +202,7 @@ class HexapodEnvIdle(gym.Env):
         # finally we get an evaluation based on what happened in the sim
         _reward,done,info= self.hexapod_state_object.processData()
         
-        self.reward = _reward - self.old_reward
+        self.reward = _reward - self.cumulated_reward
         self.old_reward = _reward
         self.cumulated_reward += self.reward
 
