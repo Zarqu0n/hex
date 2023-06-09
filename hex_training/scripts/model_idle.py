@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 import hexapod_env_idle
 import os
-import gym
+# import gym
+import gymnasium as gym
 from stable_baselines3 import PPO,DQN,DDPG
 from stable_baselines3.common.vec_env import DummyVecEnv,VecNormalize,VecMonitor
 from stable_baselines3.common.callbacks  import CheckpointCallback,EvalCallback
@@ -46,6 +47,7 @@ def main():
     env = gym.make(environment_name)
     env = DummyVecEnv([lambda: env])
     # env = VecNormalize(env, norm_obs=True, norm_reward=True, clip_obs=10.)
+    # env = VecNormalize(env, norm_obs=True, norm_reward=True, clip_obs=10.)
 
 
     vec_env = VecMonitor(env)
@@ -53,7 +55,7 @@ def main():
         model = PPO('MultiInputPolicy', vec_env, verbose=2, tensorboard_log=log_path, n_steps=n_steps,
                      n_epochs=n_epochs,gamma=gamma,ent_coef=ent_coef,vf_coef=vf_coef,
                      max_grad_norm=max_grad_norm,clip_range=clip_range,
-                     clip_range_vf=clip_range_vf,gae_lambda=gae_lambda)
+                     clip_range_vf=clip_range_vf,gae_lambda=gae_lambda,batch_size=n_steps)
         
         print("Training with PPO")
 
