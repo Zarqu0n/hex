@@ -1,0 +1,10 @@
+
+<launch>
+    <arg name="file_name" default="train_params"/>
+    <!-- Load the parameters for the algorithm -->
+    <rosparam command="load" file="$(find hex_training)/config/$(arg file_name).yaml" />
+    <!-- Launch the training system -->
+    <node pkg="hex_training" name="hexapod_gym" type="train_model.py" output="screen">
+            <param name="file_name" value="$(arg file_name)"/>
+    </node>
+</launch>
