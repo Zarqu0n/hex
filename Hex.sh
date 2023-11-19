@@ -46,6 +46,7 @@
         export HEX_COXA_FEMUR_VELOCITY=1.0
         export HEX_FEMUR_TIBIA_VELOCITY=1.0
 
+# TODO set the dynamic path
 # Gazebo Model Path
-export GAZEBO_MODEL_PATH=$GAZEBO_MODEL_PATH:/home/zarquon/Project/Hexapod-ROS1/src/gazebo_models_worlds_collection/models
-export GAZEBO_RESOURCE_PATH=$GAZEBO_RESOURCE_PATH:/home/zarquon/Project/Hexapod-ROS1/src/gazebo_models_worlds_collection/worlds
+export GAZEBO_MODEL_PATH=$GAZEBO_MODEL_PATH:/home/hex/Hexapod/src/gazebo_models_worlds_collection/models
+export GAZEBO_RESOURCE_PATH=$GAZEBO_RESOURCE_PATH:/home/hex/Hexapod/src/gazebo_models_worlds_collection/worlds
