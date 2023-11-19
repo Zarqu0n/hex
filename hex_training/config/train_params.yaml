@@ -1,19 +1,50 @@
 # Model Parameters
-model_name: model_idle4
+model_name: model_idle
 model: PPO
-total_timesteps: 100000
-
-#### PPO Hyper parameters
+total_timesteps: 300000
+env: Hexapod-v0-idle
+learning_starts: 100
 learning_rate: 0.0003
-gamma: 0.99
-nsteps: 10
-n_epochs: 1
-gae_lambda: 0.95
-clip_range: 0.2
-clip_range_vf: 0.2
-ent_coef: 0.001
-vf_coef: 0.5
-max_grad_norm: 0.5
+training_step : 5000
+#### PPO Hyper parameters
+PPO:
+  gamma: 0.99
+  nsteps: 50
+  n_epochs: 1
+  gae_lambda: 0.95
+  clip_range: 0.2
+  clip_range_vf: 0.2
+  ent_coef: 0.001
+  vf_coef: 0.5
+  max_grad_norm: 0.5
+
+#### DDPG Hyper parameters
+DDPG:
+  tau: 0.005
+  gamma: 0.99
+  batch_size: 100
+  train_freq_number: 5
+  train_freq_unit: step
+  learning_starts: 100
+  learning_rate: 0.001
+
+SAC:
+  alpha: 0.95
+  tau: 1e-5
+  batch_size: 100
+
+# A2C Hyper parameters
+a2c:
+  gamma: 0.99
+  n_steps: 10
+  vf_coef: 0.5
+  ent_coef: 0.001
+  max_grad_norm: 0.5
+  learning_rate: 0.0007
+  max_grad_norm: 0.5
+  gae_lambda: 0.95
+  rms_prop_eps: 1e-5
+
 
 #### Callback Parameters
 ### Eval Callback
