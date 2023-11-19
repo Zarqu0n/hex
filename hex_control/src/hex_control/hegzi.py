@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
 from hex_control.legCtrl import LegController
 import rospy
 import time
