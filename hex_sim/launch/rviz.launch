@@ -13,8 +13,8 @@
     <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find hex_description)/models/$(arg model)/xacro/hexapod.urdf.xacro'" />
 
     <!-- Spawn Model -->
-    <node name="spawn_model" pkg="gazebo_ros" type="spawn_model" output="screen"
-            args="-urdf -model $(arg model) -param robot_description"/>
+    <!-- <node name="spawn_model" pkg="gazebo_ros" type="spawn_model" output="screen"
+            args="-urdf -model $(arg model) -param robot_description"/> -->
 
     <!-- Robot State Publisher -->
     <node name="robot_state_publisher_hexapod" pkg="robot_state_publisher" type="robot_state_publisher"
