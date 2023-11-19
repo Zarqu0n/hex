@@ -1,23 +1,23 @@
 # Algortihm Parameters
 alpha: 0.1
-gamma: 0.003
+gamma: 0.99
 epsilon: 0.9
 epsilon_discount: 0.999 # 1098 eps to reach 0.1
-nepisodes: 20
+nepisodes: 3000
 nsteps: 20
 
 # Environment Parameters
 desired_pose:
     x: 0
     y: 0
-    z: 0.65
+    z: 0.7
 desired_yaw: 0.0 # Desired yaw in radians for the hopper to stay
-max_incl: 0.33      # in rads
-running_step: 1   # in seconds
+max_incl: 0.1     # in rads
+running_step: 2.5   # in seconds
 abs_joint_max_action: 2.3
   # in radians
-abs_min_pos_dist: 0.5
-abs_max_pos_dist: 0.7
+abs_min_pos_dist: 0.6
+abs_max_pos_dist: 0.9
 abs_max_distance: 10
 
 coxa_joint_max: 0.707
@@ -32,9 +32,9 @@ tibia_joint_min: -2.3
 ## Reward 1: Distance from desired point 
 ## Reward 2: A negative reward for penalising the ant if the external contact force is too large. 
 ## Reward 2: A negative reward for penalising orientation 
-done_reward: 1000.0 # reward
+done_reward: 100.0 # reward
 alive_reward: 100.0 # reward
 
-weight_r1: 8.0 
-weight_r2: 5.0 
-weight_r3: 2.0
+weight_r1: 10.0 
+weight_r2: 8.0 
+weight_r3: 10.0

@@ -1,14 +1,10 @@
-<!--
-    Date of creation: 5/II/2018
-    Application created by: Miguel Angel Rodriguez <duckfrost@theconstructsim.com>
-    The Construct http://www.theconstructsim.com
-    License LGPLV3 << Basically means you can do whatever you want with this!
--->
 
 <launch>
-    
+    <arg name="file_name" default="train_params"/>
     <!-- Load the parameters for the algorithm -->
-    <rosparam command="load" file="$(find hex_training)/config/qlearn_params.yaml" />
+    <rosparam command="load" file="$(find hex_training)/config/$(arg file_name).yaml" />
     <!-- Launch the training system -->
-    <node pkg="hex_training" name="hexapod_gym" type="model.py" output="screen"/>
+    <node pkg="hex_training" name="hexapod_gym" type="train_model.py" output="screen">
+            <param name="file_name" value="$(arg file_name)"/>
+    </node>
 </launch>

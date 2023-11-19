@@ -11,8 +11,9 @@ import numpy
 import math
 from hex_control.legCtrl import LegController
 from std_msgs.msg import Int32
-    
-class HexapodState(object):
+from hex_msgs.msg import IdleTrainState
+
+class HexapodStateIdle(object):
 
     def __init__(self,abs_max_roll, abs_max_pitch,abs_min_pos_dist = 0.1, abs_max_pos_dist = 0.5 ,
                  done_reward = -1000.0, alive_reward=10.0, desired_yaw=0.0, abs_max_distance=10.0,
@@ -25,6 +26,7 @@ class HexapodState(object):
         self.odom_topic = "/odom"
         self.imu_topic = "/imu"
         self.joint_state_topic = "/hexapod/joint_states"
+        self.train_state_topic = "/train_state"
 
 
         rospy.loginfo("Subscribing to odom and imu topics...")
@@ -40,6 +42,8 @@ class HexapodState(object):
 
         rospy.loginfo("Starting MonopedState Class object...")
         self.desired_world_point = Vector3(0.0, 0.0, 0.0)
+
+        self.train_state_pub = rospy.Publisher(self.train_state_topic, IdleTrainState, queue_size=1)
 
         self._abs_max_roll = abs_max_roll
         self._abs_max_pitch = abs_max_pitch
@@ -60,9 +64,9 @@ class HexapodState(object):
         self._weight_r3 = weight_r3
         self._debug = debug
 
-        self._list_of_observations = ["distance_x_from_desired_point",
-                "distance_y_from_desired_point",
-                "distance_z_from_desired_point",
+        self.prev_reward = 0.0
+        self._list_of_observations = ["desired_height",
+                "curr_height",
                 "base_roll",
                 "base_pitch",
                 "base_yaw",
@@ -108,6 +112,14 @@ class HexapodState(object):
 
         self.step = 0
         rospy.loginfo("MonopedState Class object initialization done.")
+
+
+    def getInfo(self):
+        return {"distance":self.desired_world_point.z-self.base_position.z,
+                "oriantation":self.base_orientation,
+                "contact":self.contacts,
+                "reward":self.total_reward}
+    
 
     def check_all_systems_ready(self):
         """
@@ -232,6 +244,11 @@ class HexapodState(object):
         position_ok = self._abs_min_pos_dist <= distance < self._abs_max_pos_dist
         return position_ok
 
+    def isHeightOk(self):
+        # height_ok = self._abs_min_pos_dist <= self.base_position.z < self._abs_max_pos_dist
+        height_ok = self._abs_min_pos_dist >= abs(self.base_position.z - self.desired_world_point.z)
+        return height_ok
+
     def isBaseOriantationOk(self):
 
         orientation_rpy = self.getBaseRPY()
@@ -240,6 +257,15 @@ class HexapodState(object):
         orientation_ok = roll_ok and pitch_ok
         return orientation_ok
 
+    def isContactOk(self):
+        """
+        Check if the contact is ok
+        :return:
+        """
+        contact_ok = True
+        for leg in self.legs:
+            contact_ok = contact_ok and leg.getContact()
+        return contact_ok
 
     def rewardContact(self, weight=1.0):
         """
@@ -264,7 +290,7 @@ class HexapodState(object):
         """
         curren_orientation = self.getBaseRPY()
         yaw_displacement = curren_orientation.z - self._desired_yaw
-        acumulated_orientation_displacement = abs(curren_orientation.x) + abs(curren_orientation.y) + abs(yaw_displacement)
+        acumulated_orientation_displacement = abs(curren_orientation.x) + abs(curren_orientation.y)
         reward = -weight * acumulated_orientation_displacement
         return reward
 
@@ -275,8 +301,9 @@ class HexapodState(object):
         :param weight:
         :return:reward
         """
-        distance = self.getDistanceFromPoints(self.desired_world_point)
-        reward = -weight * distance
+        distance = self.desired_world_point.z - self.base_position.z
+        distance_squared = distance ** 2
+        reward = -weight * distance_squared
         return reward
 
     def totalReward(self):
@@ -369,8 +396,11 @@ class HexapodState(object):
         :return: observation
         """
 
-        [distance_x_from_desired_point,
-         distance_y_from_desired_point,distance_z_from_desired_point] = self.getDifferenceDistanceFromPoints(self.desired_world_point)
+        # [distance_x_from_desired_point,
+        #  distance_y_from_desired_point,distance_z_from_desired_point] = self.getDifferenceDistanceFromPoints(self.desired_world_point)
+
+        current_height = self.base_position.z
+        desired_height = self.desired_world_point.z
 
         base_orientation = self.getBaseRPY()
         base_roll = base_orientation.x
@@ -407,13 +437,13 @@ class HexapodState(object):
 
 
 
-        observation = {"Distance":numpy.array([distance_x_from_desired_point,
-         distance_y_from_desired_point,distance_z_from_desired_point]),
-             "BaseOrientation":numpy.array([base_roll,base_pitch,base_yaw]),
-             "Contacts":numpy.array([contact_bool_1,contact_bool_2,contact_bool_3,contact_bool_4,contact_bool_5,contact_bool_6]),
+        observation = {"Distance":numpy.array([current_height,
+         desired_height],dtype=numpy.float32),
+             "BaseOrientation":numpy.array([base_roll,base_pitch,base_yaw],dtype=numpy.float32),
+             "Contacts":numpy.array([contact_bool_1,contact_bool_2,contact_bool_3,contact_bool_4,contact_bool_5,contact_bool_6],dtype=numpy.float32),
              "JointStates":numpy.array([base_coxa_joint_1_state,base_coxa_joint_2_state,base_coxa_joint_3_state,base_coxa_joint_4_state,base_coxa_joint_5_state,base_coxa_joint_6_state,
              coxa_femur_joint_1_state,coxa_femur_joint_2_state,coxa_femur_joint_3_state,coxa_femur_joint_4_state,coxa_femur_joint_5_state,coxa_femur_joint_6_state,
-             femur_tibia_joint_1_state,femur_tibia_joint_2_state,femur_tibia_joint_3_state,femur_tibia_joint_4_state,femur_tibia_joint_5_state,femur_tibia_joint_6_state])}
+             femur_tibia_joint_1_state,femur_tibia_joint_2_state,femur_tibia_joint_3_state,femur_tibia_joint_4_state,femur_tibia_joint_5_state,femur_tibia_joint_6_state],dtype=numpy.float32)}
 
         return observation
 
@@ -423,20 +453,30 @@ class HexapodState(object):
         ( it fell basically )
         :return: reward, done
         """
-        position_ok = self.isPositionOk()
+        position_ok = self.isHeightOk()
         orientation_ok = self.isBaseOriantationOk()
+        contact_ok = self.isContactOk()
         self.step += 1
         done = (position_ok and orientation_ok)
-        if done:
-            rospy.loginfo("It fell, so the reward has to be very low")
-            total_reward = self._done_reward
-        else:
-            rospy.loginfo("Calculate normal reward because it didn't fall.")
-            total_reward = self.totalReward()
+        total_reward = self.totalReward()
+        reward = total_reward  + (self._done_reward if done else 0.0)
 
-        distance = self.getDistanceFromPoints(self.desired_world_point)
-        info = {"Total Reward":total_reward,
-                "Distance":distance}
+        distance = abs(self.base_position.z - self.desired_world_point.z)
 
+        info = self.getInfo()
 
-        return total_reward, done, info
+        idle_state = IdleTrainState()
+        idle_state.distance = distance
+        idle_state.distance_ok = position_ok
+        idle_state.distance_reward = self.distance_reward
+        idle_state.oriantation_roll = self.base_orientation.x
+        idle_state.oriantation_pitch = self.base_orientation.y
+        idle_state.oriantation_ok = orientation_ok
+        idle_state.oriantation_reward = self.orientation_reward
+        idle_state.contact_ok = contact_ok
+        idle_state.contact_reward = self.contact_reward
+        idle_state.total_reward = total_reward
+        self.train_state_pub.publish(idle_state)
+        
+
+        return reward, done, info
