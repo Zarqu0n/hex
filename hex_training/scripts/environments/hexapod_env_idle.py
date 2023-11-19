@@ -17,15 +17,10 @@ from hexapod_idle_state import HexapodStateIdle
 from controllers_connection import ControllersConnection
 from hex_control.hegzi import HexapodController
 import random
-#register the training environment in the gym as an available one
-reg = gym.register(
-    id='Hexapod-v0-idle',
-    entry_point='hexapod_env_idle:HexapodEnvIdle',
-    max_episode_steps=50
-    )
 
 
-class HexapodEnvIdle(gym.Env):
+
+class HexapodIdle(gym.Env):
     metadata = {'render_modes': ['human']}
     def __init__(self):
         
